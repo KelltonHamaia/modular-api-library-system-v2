@@ -26,7 +26,7 @@ export const users = pgTable('users', {
   ...idHelper,
   name: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique('email-unique-constraint'),
-  status: userStatus().default('ACTIVE'),
+  status: userStatus().notNull(),
 })
 
 export const books = pgTable('books', {
@@ -42,7 +42,7 @@ export const loans = pgTable('loans', {
   loanDate: timestamp({ withTimezone: true }).notNull().defaultNow(),
   dueDate: timestamp({ withTimezone: true }).notNull(),
   returnDate: timestamp({ withTimezone: true }),
-  overDue: boolean().notNull().default(false),
+  overDue: boolean().notNull(),
 
   userId: uuid()
     .notNull()
