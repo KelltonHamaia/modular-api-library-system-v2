@@ -1,7 +1,10 @@
 import { userData } from '@/modules/users/data/users.data.js'
 import * as domain from '@/modules/users/domain/users.domain.js'
 import { UserRepository } from '@/modules/users/domain/users.repository.js'
-import { CreateUserInput } from '@/modules/users/domain/users.type.js'
+import {
+  CreateUserInput,
+  UserStatus,
+} from '@/modules/users/domain/users.type.js'
 import { IdParams } from '@/shared/http/commom-schemas.http.js'
 
 export const createUser = async (
@@ -18,10 +21,32 @@ export const createUser = async (
 }
 
 export const getUserById = async (
-  { id }: IdParams,
+  id: string,
   repository: UserRepository = userData,
 ) => {
   const rawUser = await repository.findById(id)
   const user = domain.ensureUserExists(rawUser)
   return user
+}
+
+export const updateUserStatusById = async (
+  id: string,
+  status: UserStatus,
+  repository: UserRepository = userData,
+) => {
+  const rawUser = await repository.findById(id)
+  const user = domain.ensureUserExists(rawUser)
+
+  if (user.status === status) {
+    return {
+      user,
+      statusChanged: false,
+    }
+  }
+
+  const updatedUser = await repository.updateStatus(user.id, status)
+  return {
+    user: updatedUser,
+    statusChanged: true,
+  }
 }

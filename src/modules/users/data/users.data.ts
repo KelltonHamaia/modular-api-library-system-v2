@@ -22,6 +22,15 @@ export const makeUserRepository = (executor: DBExecutor): UserRepository => {
       const [user] = await executor.select().from(users).where(eq(users.id, id))
       return user ?? null
     },
+
+    async updateStatus(id, status) {
+      const [user] = await executor
+        .update(users)
+        .set({ status })
+        .where(eq(users.id, id))
+        .returning()
+      return user
+    },
   }
 }
 
