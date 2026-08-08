@@ -1,3 +1,4 @@
+import { booksRoutes } from '@/modules/books/http/books.routes.js'
 import { userRoutes } from '@/modules/users/http/users.routes.js'
 import { errorHandlerMiddleware } from '@/shared/errors/error-handler.middleware.shared.js'
 import express from 'express'
@@ -14,6 +15,7 @@ app.get('/v1/health-check', (req, res) => {
 })
 
 app.use('/v1/users', userRoutes)
+app.use('/v1/books', booksRoutes)
 
 app.use((req, res) => {
   res.status(404).json({
