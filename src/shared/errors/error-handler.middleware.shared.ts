@@ -18,13 +18,13 @@ export const errorHandlerMiddleware: ErrorRequestHandler = async (
 
   if (error instanceof AppError) {
     console.log(error)
-    res.status(error.code).json({
+    return res.status(error.code).json({
       message: error.message,
     })
   }
 
   console.log(error)
-  res.status(500).json({
+  return res.status(500).json({
     error: 'Internal server error',
   })
 }
