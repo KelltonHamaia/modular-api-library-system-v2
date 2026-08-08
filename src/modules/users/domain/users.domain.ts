@@ -17,7 +17,7 @@ export const assertEmailIsNotTaken = (
   email: string,
 ): void => {
   if (user && user.email === email) {
-    throw new customErrors.BusinessRuleError('Email provided already taken.')
+    throw new customErrors.ConflictError('Email provided already taken.')
   }
 }
 
