@@ -9,3 +9,9 @@ export const postCreateUser: RequestHandler = async (req, res) => {
   const result = await service.createUser(input)
   return res.status(201).json({ result })
 }
+
+export const getUserById: RequestHandler = async (req, res) => {
+  const { id } = validateSchema(idParamsSchema, req, 'params')
+  const result = await service.getUserById({ id })
+  return res.status(200).json({ result })
+}

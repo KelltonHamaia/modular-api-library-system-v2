@@ -3,3 +3,4 @@ import { Router } from 'express'
 
 export const userRoutes = Router()
 userRoutes.post('/', controller.postCreateUser)
+userRoutes.get('/:id', controller.getUserById)

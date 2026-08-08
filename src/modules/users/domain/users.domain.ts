@@ -20,3 +20,10 @@ export const assertEmailIsNotTaken = (
     throw new customErrors.BusinessRuleError('Email provided already taken.')
   }
 }
+
+export const ensureUserExists = (rawUser: User | null): User => {
+  if (!rawUser) {
+    throw new customErrors.NotFoundError('User not found')
+  }
+  return rawUser
+}

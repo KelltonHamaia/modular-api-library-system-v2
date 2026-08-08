@@ -16,3 +16,12 @@ export const createUser = async (
 
   return newUser
 }
+
+export const getUserById = async (
+  { id }: IdParams,
+  repository: UserRepository = userData,
+) => {
+  const rawUser = await repository.findById(id)
+  const user = domain.ensureUserExists(rawUser)
+  return user
+}

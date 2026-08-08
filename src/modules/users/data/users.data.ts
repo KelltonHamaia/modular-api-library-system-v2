@@ -17,6 +17,11 @@ export const makeUserRepository = (executor: DBExecutor): UserRepository => {
         .where(eq(users.email, email))
       return user ?? null
     },
+
+    async findById(id) {
+      const [user] = await executor.select().from(users).where(eq(users.id, id))
+      return user ?? null
+    },
   }
 }
 
