@@ -5,4 +5,6 @@ export type BooksRepository = {
   findByTitleAndAuthor: (title: string, author: string) => Promise<Book | null>
   findAll: () => Promise<Book[]>
   findBookById: (id: string) => Promise<Book | null>
+  decreaseAvailableCopy: (bookId: string) => Promise<Book | null>
+  increaseAvailableCopy: (bookId: string) => Promise<Book | null>
 }

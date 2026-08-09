@@ -1,7 +1,7 @@
 import { DBExecutor, db } from '@/db/client.js'
 import { books } from '@/db/schema.js'
 import { BooksRepository } from '@/modules/books/domain/books.repository.js'
-import { and, eq } from 'drizzle-orm'
+import { and, eq, gt, lt, sql } from 'drizzle-orm'
 
 export const makeBookRepository = (executor: DBExecutor): BooksRepository => {
   return {
@@ -23,6 +23,29 @@ export const makeBookRepository = (executor: DBExecutor): BooksRepository => {
 
     async findBookById(id) {
       const [book] = await executor.select().from(books).where(eq(books.id, id))
+      return book ?? null
+    },
+
+    async increaseAvailableCopy(bookId) {
+      const [book] = await executor
+        .update(books)
+        .set({ availableCopies: sql`${books.availableCopies} + 1` })
+        .where(
+          and(
+            eq(books.id, bookId),
+            lt(books.availableCopies, books.totalCopies),
+          ),
+        )
+        .returning()
+      return book ?? null
+    },
+
+    async decreaseAvailableCopy(bookId) {
+      const [book] = await executor
+        .update(books)
+        .set({ availableCopies: sql`${books.availableCopies} - 1` })
+        .where(and(eq(books.id, bookId), gt(books.availableCopies, 0)))
+        .returning()
       return book ?? null
     },
   }

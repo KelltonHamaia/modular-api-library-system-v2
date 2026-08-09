@@ -5,7 +5,6 @@ import {
   CreateUserInput,
   UserStatus,
 } from '@/modules/users/domain/users.type.js'
-import { IdParams } from '@/shared/http/commom-schemas.http.js'
 
 export const createUser = async (
   createUserInput: CreateUserInput,
@@ -49,4 +48,14 @@ export const updateUserStatusById = async (
     user: updatedUser,
     statusChanged: true,
   }
+}
+
+export const getActiveUserById = async (
+  id: string,
+  repository: UserRepository = userData,
+) => {
+  const rawUser = await repository.findById(id)
+  const user = domain.ensureUserExists(rawUser)
+  domain.assertUserIsActive(user)
+  return user
 }
