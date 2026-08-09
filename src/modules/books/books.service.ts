@@ -17,3 +17,8 @@ export const createBook = async (
   const book = await repository.createBook(builtBook)
   return book
 }
+
+export const listAllBooks = async (repository: BooksRepository = bookData) => {
+  const books = await repository.findAll()
+  return books
+}

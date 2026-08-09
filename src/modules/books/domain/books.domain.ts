@@ -16,3 +16,10 @@ export const assertBookNotExists = (book: Book | null): void => {
     throw new CustomErrors.ConflictError('Book already exists.')
   }
 }
+
+export const ensureBookExists = (book: Book | null) => {
+  if (!book) {
+    throw new CustomErrors.NotFoundError('Book not found.')
+  }
+  return book
+}

@@ -7,15 +7,20 @@ export const makeBookRepository = async (
   executor: DBExecutor,
 ): Promise<BooksRepository> => {
   return {
+    async createBook(newBook) {
+      const [book] = await executor.insert(books).values(newBook).returning()
+      return book
+    },
+
     async findByTitleAndAuthor(title, author) {
       const condition = and(eq(books.title, title), eq(books.author, author))
 
       const [book] = await executor.select().from(books).where(condition)
       return book ?? null
     },
-    async createBook(newBook) {
-      const [book] = await executor.insert(books).values(newBook).returning()
-      return book
+
+    async findAll() {
+      return await executor.select().from(books)
     },
   }
 }

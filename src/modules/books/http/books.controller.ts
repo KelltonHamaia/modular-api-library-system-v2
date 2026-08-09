@@ -8,3 +8,8 @@ export const postCreateUser: RequestHandler = async (req, res) => {
   const result = await service.createBook(createBookInput)
   return res.status(201).json({ result })
 }
+
+export const getListBooks: RequestHandler = async (req, res) => {
+  const result = await service.listAllBooks()
+  return res.status(201).json({ result })
+}
