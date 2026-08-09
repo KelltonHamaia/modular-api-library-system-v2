@@ -3,9 +3,7 @@ import { books } from '@/db/schema.js'
 import { BooksRepository } from '@/modules/books/domain/books.repository.js'
 import { and, eq } from 'drizzle-orm'
 
-export const makeBookRepository = async (
-  executor: DBExecutor,
-): Promise<BooksRepository> => {
+export const makeBookRepository = (executor: DBExecutor): BooksRepository => {
   return {
     async createBook(newBook) {
       const [book] = await executor.insert(books).values(newBook).returning()
