@@ -22,6 +22,11 @@ export const makeBookRepository = async (
     async findAll() {
       return await executor.select().from(books)
     },
+
+    async findBookById(id) {
+      const [book] = await executor.select().from(books).where(eq(books.id, id))
+      return book ?? null
+    },
   }
 }
 

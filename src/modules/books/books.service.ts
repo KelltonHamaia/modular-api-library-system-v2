@@ -22,3 +22,13 @@ export const listAllBooks = async (repository: BooksRepository = bookData) => {
   const books = await repository.findAll()
   return books
 }
+
+export const getBookById = async (
+  id: string,
+  repository: BooksRepository = bookData,
+) => {
+  const rawBook = await repository.findBookById(id)
+  const book = domain.ensureBookExists(rawBook)
+
+  return book
+}
