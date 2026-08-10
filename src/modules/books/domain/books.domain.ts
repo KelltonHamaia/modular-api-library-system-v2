@@ -23,3 +23,11 @@ export const ensureBookExists = (book: Book | null) => {
   }
   return book
 }
+
+export const assertAvailableCopiesIncreased = (book: Book | null) => {
+  if (!book) {
+    throw new CustomErrors.BusinessRuleError(
+      'AvailableCopies cannot exceed TotalCopies',
+    )
+  }
+}

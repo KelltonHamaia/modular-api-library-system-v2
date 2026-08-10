@@ -34,5 +34,22 @@ export const makeLoansRepository = (executor: DBExecutor): LoanRepository => {
       const [loan] = await executor.insert(loans).values(newLoan).returning()
       return loan
     },
+
+    async findLoanById(loanId) {
+      const [loan] = await executor
+        .select()
+        .from(loans)
+        .where(eq(loans.id, loanId))
+      return loan ?? null
+    },
+
+    async returnBookById(loanId, overDue, returnDate) {
+      const [loan] = await executor
+        .update(loans)
+        .set({ overDue, returnDate })
+        .where(eq(loans.id, loanId))
+        .returning()
+      return loan
+    },
   }
 }

@@ -4,7 +4,11 @@ import { CreateLoanInput } from '@/modules/loans/domain/loans.type.js'
 import { getActiveUserById } from '@/modules/users/index.js'
 
 import * as domain from '@/modules/loans/domain/loans.domain.js'
-import { getBookById, makeBookRepository } from '@/modules/books/index.js'
+import {
+  getBookById,
+  makeBookRepository,
+  assertAvailableCopiesIncreased,
+} from '@/modules/books/index.js'
 
 export const createLoan = async (createLoanInput: CreateLoanInput) => {
   const { bookId, userId } = createLoanInput
@@ -32,4 +36,26 @@ export const createLoan = async (createLoanInput: CreateLoanInput) => {
   })
 
   return newLoan
+}
+
+export const returnLoan = async (loanId: string) => {
+  return await db.transaction(async (tx) => {
+    const loanRepository = makeLoansRepository(tx)
+    const bookRepository = makeBookRepository(tx)
+
+    const rawLoan = await loanRepository.findLoanById(loanId)
+    const loan = domain.ensureLoanExists(rawLoan)
+    domain.ensureLoanHasNotBeenReturned(loan)
+
+    const returnDate = new Date()
+    const isOverDue = domain.calculateLoanIsOverdue(loan.dueDate, new Date())
+    const returnedLoan = await loanRepository.returnBookById(
+      loan.id,
+      isOverDue,
+      returnDate,
+    )
+    const book = await bookRepository.increaseAvailableCopy(loan.bookId)
+    assertAvailableCopiesIncreased(book)
+    return returnedLoan
+  })
 }

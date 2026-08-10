@@ -7,4 +7,10 @@ export type LoanRepository = {
     bookId: string,
   ) => Promise<Loan | null>
   createLoan: (newLoan: NewLoan) => Promise<Loan>
+  findLoanById: (loanId: string) => Promise<Loan | null>
+  returnBookById: (
+    loanId: string,
+    overDue: boolean,
+    returnDate: Date,
+  ) => Promise<Loan>
 }

@@ -1,4 +1,3 @@
-import { Book } from '@/modules/books/domain/books.type.js'
 import {
   CreateLoanInput,
   Loan,
@@ -14,6 +13,10 @@ const calculateDueDate = (loanRequestDate: Date): Date => {
   dueDate.setDate(dueDate.getDate() + LOAN_DURATION_DAYS)
 
   return dueDate
+}
+
+export const calculateLoanIsOverdue = (dueDate: Date, returnDate: Date) => {
+  return returnDate > dueDate
 }
 
 export const buildLoan = (
@@ -45,5 +48,20 @@ export const assertWithinLoanLimit = (totalLoans: number) => {
 export const assertBookHasAvailableCopy = (availableCopies: number) => {
   if (availableCopies <= 0) {
     throw new CustomError.BusinessRuleError('Book has no copies left to loan.')
+  }
+}
+
+export const ensureLoanExists = (loan: Loan | null): Loan => {
+  if (!loan) {
+    throw new CustomError.NotFoundError('Loan not found.')
+  }
+  return loan
+}
+
+export const ensureLoanHasNotBeenReturned = (loan: Loan) => {
+  if (loan.returnDate) {
+    throw new CustomError.ConflictError(
+      'Cannot return a loan that has been already returned',
+    )
   }
 }
