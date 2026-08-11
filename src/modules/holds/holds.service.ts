@@ -24,3 +24,11 @@ export const createHold = async (
   const newHold = await repository.createHold(builtHold)
   return newHold
 }
+
+export const getHoldsByUserId = async (
+  userId: string,
+  repository: HoldsRepository = holdsData,
+) => {
+  const userHolds = await repository.findHoldsByUserId(userId)
+  return userHolds
+}

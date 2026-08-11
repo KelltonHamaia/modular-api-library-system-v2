@@ -1,5 +1,5 @@
 import { DBExecutor, db } from '@/db/client.js'
-import { holds } from '@/db/schema.js'
+import { holds, holds } from '@/db/schema.js'
 import { HoldsRepository } from '@/modules/holds/domain/holds.repositoty.js'
 import { and, eq } from 'drizzle-orm'
 
@@ -19,6 +19,14 @@ export const makeHoldsRepository = (executor: DBExecutor): HoldsRepository => {
 
       const [hold] = await executor.select().from(holds).where(conditions)
       return hold ?? null
+    },
+
+    async findHoldsByUserId(userId) {
+      const userHolds = await executor
+        .select()
+        .from(holds)
+        .where(eq(holds.userId, userId))
+      return userHolds
     },
   }
 }
