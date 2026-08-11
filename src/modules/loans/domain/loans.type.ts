@@ -10,5 +10,3 @@ export type NewLoan = CreateLoanInput & {
 }
 
 export type Loan = NewLoan & { id: string; loanDate: Date }
-
-let t: NewLoan = {}

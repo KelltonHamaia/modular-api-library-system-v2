@@ -13,4 +13,6 @@ export type LoanRepository = {
     overDue: boolean,
     returnDate: Date,
   ) => Promise<Loan>
+  findLoans: () => Promise<Loan[]>
+  findLoansByUserId: (userId: string) => Promise<Loan[]>
 }

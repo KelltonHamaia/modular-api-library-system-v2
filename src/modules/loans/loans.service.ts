@@ -1,5 +1,8 @@
 import { db } from '@/db/client.js'
-import { makeLoansRepository } from '@/modules/loans/data/loans.data.js'
+import {
+  loanData,
+  makeLoansRepository,
+} from '@/modules/loans/data/loans.data.js'
 import { CreateLoanInput } from '@/modules/loans/domain/loans.type.js'
 import { getActiveUserById } from '@/modules/users/index.js'
 
@@ -9,6 +12,7 @@ import {
   makeBookRepository,
   assertAvailableCopiesIncreased,
 } from '@/modules/books/index.js'
+import { LoanRepository } from '@/modules/loans/domain/loans.repository.js'
 
 export const createLoan = async (createLoanInput: CreateLoanInput) => {
   const { bookId, userId } = createLoanInput
@@ -58,4 +62,17 @@ export const returnLoan = async (loanId: string) => {
     assertAvailableCopiesIncreased(book)
     return returnedLoan
   })
+}
+
+export const listLoans = async (db: LoanRepository = loanData) => {
+  const loans = await db.findLoans()
+  return loans
+}
+
+export const listLoansByUserId = async (
+  userId: string,
+  db: LoanRepository = loanData,
+) => {
+  const loans = await db.findLoansByUserId(userId)
+  return loans
 }

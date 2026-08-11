@@ -4,3 +4,4 @@ export const loansRoutes = Router()
 
 loansRoutes.post('/', controller.postCreateLoan)
 loansRoutes.patch('/:id/return', controller.patchReturnLoan)
+loansRoutes.get('/', controller.getLoans)

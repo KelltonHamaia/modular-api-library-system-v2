@@ -1,4 +1,4 @@
-import { DBExecutor } from '@/db/client.js'
+import { db, DBExecutor } from '@/db/client.js'
 import { loans } from '@/db/schema.js'
 import { LoanRepository } from '@/modules/loans/domain/loans.repository.js'
 import { and, count, eq, isNull } from 'drizzle-orm'
@@ -51,5 +51,19 @@ export const makeLoansRepository = (executor: DBExecutor): LoanRepository => {
         .returning()
       return loan
     },
+
+    async findLoans() {
+      return await executor.select().from(loans)
+    },
+
+    async findLoansByUserId(userId) {
+      const userLoans = await executor
+        .select()
+        .from(loans)
+        .where(eq(loans.userId, userId))
+      return userLoans
+    },
   }
 }
+
+export const loanData = makeLoansRepository(db)
