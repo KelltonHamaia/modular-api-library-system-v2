@@ -32,3 +32,14 @@ export const getHoldsByUserId = async (
   const userHolds = await repository.findHoldsByUserId(userId)
   return userHolds
 }
+
+export const cancelHoldById = async (
+  holdId: string,
+  repository: HoldsRepository = holdsData,
+) => {
+  const rawHold = await repository.findHoldById(holdId)
+  const hold = domain.ensureHoldExists(rawHold)
+  domain.assertHoldCanBeCancelled(hold)
+  const cancelled = await repository.cancelHoldById(hold.id)
+  return cancelled
+}

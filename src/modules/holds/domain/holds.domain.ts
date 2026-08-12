@@ -34,3 +34,20 @@ export const assertHoldNotExists = (hold: Hold | null) => {
     )
   }
 }
+
+export const ensureHoldExists = (hold: Hold | null) => {
+  if (!hold) {
+    throw new CustomErrors.NotFoundError('Hold not found.')
+  }
+  return hold
+}
+
+export const assertHoldCanBeCancelled = (hold: Hold) => {
+  const notAllowedToCancell = ['FULFILLED', 'CANCELLED']
+
+  if (notAllowedToCancell.includes(hold.status)) {
+    throw new CustomErrors.ConflictError(
+      `Cannot cancell a hold that's already cancelled or fulfilled: Hold status ${hold.status}`,
+    )
+  }
+}
