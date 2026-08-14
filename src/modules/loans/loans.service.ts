@@ -4,14 +4,21 @@ import {
   makeLoansRepository,
 } from '@/modules/loans/data/loans.data.js'
 import { CreateLoanInput } from '@/modules/loans/domain/loans.type.js'
-import { getActiveUserById } from '@/modules/users/index.js'
-
-import * as domain from '@/modules/loans/domain/loans.domain.js'
 import {
+  getActiveUserById,
+  listActiveUsersByIds,
+} from '@/modules/users/index.js'
+
+import {
+  assertAvailableCopiesIncreased,
   getBookById,
   makeBookRepository,
-  assertAvailableCopiesIncreased,
 } from '@/modules/books/index.js'
+import {
+  listWaitingHoldByBookId,
+  makeHoldsRepository,
+} from '@/modules/holds/index.js'
+import * as domain from '@/modules/loans/domain/loans.domain.js'
 import { LoanRepository } from '@/modules/loans/domain/loans.repository.js'
 
 export const createLoan = async (createLoanInput: CreateLoanInput) => {
@@ -58,9 +65,47 @@ export const returnLoan = async (loanId: string) => {
       isOverDue,
       returnDate,
     )
-    const book = await bookRepository.increaseAvailableCopy(loan.bookId)
-    assertAvailableCopiesIncreased(book)
-    return returnedLoan
+
+    const waitingHolds = await listWaitingHoldByBookId(loan.bookId)
+
+    const candidateUserIds = waitingHolds.map((hold) => hold.userId)
+    const activeUser = await listActiveUsersByIds(candidateUserIds)
+    const activeUserIds = new Set(activeUser.map((user) => user.id))
+
+    let holdToFulfill = null
+
+    for (const hold of waitingHolds) {
+      if (!activeUserIds.has(hold.userId)) {
+        continue
+      }
+      const holderActiveLoans = await loanRepository.countActiveLoansByUserId(
+        hold.userId,
+      )
+      if (domain.isWithinLoanLimit(holderActiveLoans)) {
+        holdToFulfill = hold
+        break
+      }
+    }
+
+    if (holdToFulfill) {
+      const { bookId, userId } = holdToFulfill
+      const createLoanInput = { bookId, userId }
+      const builtLoan = domain.buildLoan(createLoanInput, new Date())
+      const newLoan = await loanRepository.createLoan(builtLoan)
+      const holdRepository = makeHoldsRepository(tx)
+      await holdRepository.fulfillHoldById(holdToFulfill.id)
+      return {
+        returnedLoan,
+        holdFulfilled: newLoan,
+      }
+    } else {
+      const book = await bookRepository.increaseAvailableCopy(loan.bookId)
+      assertAvailableCopiesIncreased(book)
+      return {
+        returnedLoan,
+        holdFulfilled: null,
+      }
+    }
   })
 }
 

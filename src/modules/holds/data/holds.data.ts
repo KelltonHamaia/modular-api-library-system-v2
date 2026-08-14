@@ -1,7 +1,7 @@
 import { DBExecutor, db } from '@/db/client.js'
 import { holds } from '@/db/schema.js'
 import { HoldsRepository } from '@/modules/holds/domain/holds.repositoty.js'
-import { and, eq } from 'drizzle-orm'
+import { and, asc, eq } from 'drizzle-orm'
 
 export const makeHoldsRepository = (executor: DBExecutor): HoldsRepository => {
   return {
@@ -45,6 +45,24 @@ export const makeHoldsRepository = (executor: DBExecutor): HoldsRepository => {
         .where(eq(holds.id, holdId))
         .returning()
       return hold
+    },
+
+    async listWaitingHoldByBookId(bookId) {
+      const waitingHolds = await executor
+        .select()
+        .from(holds)
+        .where(and(eq(holds.bookId, bookId), eq(holds.status, 'WAITING')))
+        .orderBy(asc(holds.requestedAt))
+      return waitingHolds
+    },
+
+    async fulfillHoldById(holdId) {
+      const [fulfilledHold] = await executor
+        .update(holds)
+        .set({ status: 'FULFILED' })
+        .where(eq(holds.id, holdId))
+        .returning()
+      return fulfilledHold
     },
   }
 }

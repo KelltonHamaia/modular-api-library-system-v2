@@ -43,3 +43,19 @@ export const cancelHoldById = async (
   const cancelled = await repository.cancelHoldById(hold.id)
   return cancelled
 }
+
+export const listWaitingHoldByBookId = async (
+  bookId: string,
+  repository: HoldsRepository = holdsData,
+) => {
+  const holds = await repository.listWaitingHoldByBookId(bookId)
+  return holds
+}
+
+export const fulfillHoldById = async (
+  holdId: string,
+  repository: HoldsRepository = holdsData,
+) => {
+  const fulfilledHold = await repository.fulfillHoldById(holdId)
+  return fulfilledHold
+}

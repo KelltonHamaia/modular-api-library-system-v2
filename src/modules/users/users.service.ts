@@ -59,3 +59,11 @@ export const getActiveUserById = async (
   domain.assertUserIsActive(user)
   return user
 }
+
+export const listActiveUsersByIds = async (
+  ids: string[],
+  repository: UserRepository = userData,
+) => {
+  const activeUsers = await repository.findActiveUsersById(ids)
+  return activeUsers
+}

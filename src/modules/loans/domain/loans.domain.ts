@@ -65,3 +65,7 @@ export const ensureLoanHasNotBeenReturned = (loan: Loan) => {
     )
   }
 }
+
+export const isWithinLoanLimit = (totalLoans: number) => {
+  return totalLoans < LOANS_PER_USER
+}

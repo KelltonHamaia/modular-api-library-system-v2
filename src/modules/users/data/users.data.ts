@@ -1,7 +1,7 @@
 import { db, DBExecutor } from '@/db/client.js'
 import { users } from '@/db/schema.js'
 import { UserRepository } from '@/modules/users/domain/users.repository.js'
-import { eq } from 'drizzle-orm'
+import { and, eq, inArray } from 'drizzle-orm'
 
 export const makeUserRepository = (executor: DBExecutor): UserRepository => {
   return {
@@ -30,6 +30,14 @@ export const makeUserRepository = (executor: DBExecutor): UserRepository => {
         .where(eq(users.id, id))
         .returning()
       return user
+    },
+
+    async findActiveUsersById(ids) {
+      const activeUsers = await executor
+        .select()
+        .from(users)
+        .where(and(eq(users.status, 'ACTIVE'), inArray(users.id, ids)))
+      return activeUsers
     },
   }
 }

@@ -10,4 +10,6 @@ export type HoldsRepository = {
   findHoldsByUserId: (userId: string) => Promise<Hold[]>
   findHoldById: (holdId: string) => Promise<Hold | null>
   cancelHoldById: (holdId: string) => Promise<Hold>
+  listWaitingHoldByBookId: (bookId: string) => Promise<Hold[]>
+  fulfillHoldById: (holdId: string) => Promise<Hold>
 }

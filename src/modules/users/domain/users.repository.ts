@@ -5,4 +5,5 @@ export interface UserRepository {
   findByEmail: (email: string) => Promise<User | null>
   findById: (id: string) => Promise<User | null>
   updateStatus: (id: string, status: UserStatus) => Promise<User>
+  findActiveUsersById: (ids: string[]) => Promise<User[]>
 }
