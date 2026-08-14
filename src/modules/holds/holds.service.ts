@@ -1,6 +1,6 @@
 import * as domain from '@/modules/holds/domain/holds.domain.js'
 import { holdsData } from '@/modules/holds/data/holds.data.js'
-import { HoldsRepository } from '@/modules/holds/domain/holds.repositoty.js'
+import { HoldsRepository } from '@/modules/holds/domain/holds.repository.js'
 import { CreateHoldInput } from '@/modules/holds/domain/holds.type.js'
 
 import { getActiveUserById } from '@/modules/users/index.js'

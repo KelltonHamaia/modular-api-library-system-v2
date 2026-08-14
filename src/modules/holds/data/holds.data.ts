@@ -1,6 +1,6 @@
 import { DBExecutor, db } from '@/db/client.js'
 import { holds } from '@/db/schema.js'
-import { HoldsRepository } from '@/modules/holds/domain/holds.repositoty.js'
+import { HoldsRepository } from '@/modules/holds/domain/holds.repository.js'
 import { and, asc, eq } from 'drizzle-orm'
 
 export const makeHoldsRepository = (executor: DBExecutor): HoldsRepository => {
