@@ -10,20 +10,25 @@ export const makeUserRepository = (executor: DBExecutor): UserRepository => {
       return user
     },
 
-    async findByEmail(email) {
+    async findUserByEmail(email) {
       const [user] = await executor
         .select()
         .from(users)
         .where(eq(users.email, email))
+        .limit(1)
       return user ?? null
     },
 
-    async findById(id) {
-      const [user] = await executor.select().from(users).where(eq(users.id, id))
+    async findUserById(id) {
+      const [user] = await executor
+        .select()
+        .from(users)
+        .where(eq(users.id, id))
+        .limit(1)
       return user ?? null
     },
 
-    async updateStatus(id, status) {
+    async updateUserStatus(id, status) {
       const [user] = await executor
         .update(users)
         .set({ status })

@@ -17,7 +17,11 @@ export const makeHoldsRepository = (executor: DBExecutor): HoldsRepository => {
         eq(holds.status, 'WAITING'),
       )
 
-      const [hold] = await executor.select().from(holds).where(conditions)
+      const [hold] = await executor
+        .select()
+        .from(holds)
+        .where(conditions)
+        .limit(1)
       return hold ?? null
     },
 

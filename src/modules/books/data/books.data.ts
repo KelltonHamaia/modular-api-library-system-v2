@@ -12,8 +12,11 @@ export const makeBookRepository = (executor: DBExecutor): BooksRepository => {
 
     async findByTitleAndAuthor(title, author) {
       const condition = and(eq(books.title, title), eq(books.author, author))
-
-      const [book] = await executor.select().from(books).where(condition)
+      const [book] = await executor
+        .select()
+        .from(books)
+        .where(condition)
+        .limit(1)
       return book ?? null
     },
 
@@ -51,4 +54,4 @@ export const makeBookRepository = (executor: DBExecutor): BooksRepository => {
   }
 }
 
-export const bookData = await makeBookRepository(db)
+export const bookData = makeBookRepository(db)

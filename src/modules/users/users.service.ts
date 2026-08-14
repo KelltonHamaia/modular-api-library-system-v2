@@ -10,7 +10,7 @@ export const createUser = async (
   createUserInput: CreateUserInput,
   repository: UserRepository = userData,
 ) => {
-  const userWithEmail = await repository.findByEmail(createUserInput.email)
+  const userWithEmail = await repository.findUserByEmail(createUserInput.email)
   domain.assertEmailIsNotTaken(userWithEmail, createUserInput.email)
 
   const builtUser = domain.buildNewUser(createUserInput)
@@ -23,7 +23,7 @@ export const getUserById = async (
   id: string,
   repository: UserRepository = userData,
 ) => {
-  const rawUser = await repository.findById(id)
+  const rawUser = await repository.findUserById(id)
   const user = domain.ensureUserExists(rawUser)
   return user
 }
@@ -33,7 +33,7 @@ export const updateUserStatusById = async (
   status: UserStatus,
   repository: UserRepository = userData,
 ) => {
-  const rawUser = await repository.findById(id)
+  const rawUser = await repository.findUserById(id)
   const user = domain.ensureUserExists(rawUser)
 
   if (user.status === status) {
@@ -43,7 +43,7 @@ export const updateUserStatusById = async (
     }
   }
 
-  const updatedUser = await repository.updateStatus(user.id, status)
+  const updatedUser = await repository.updateUserStatus(user.id, status)
   return {
     user: updatedUser,
     statusChanged: true,
@@ -54,7 +54,7 @@ export const getActiveUserById = async (
   id: string,
   repository: UserRepository = userData,
 ) => {
-  const rawUser = await repository.findById(id)
+  const rawUser = await repository.findUserById(id)
   const user = domain.ensureUserExists(rawUser)
   domain.assertUserIsActive(user)
   return user

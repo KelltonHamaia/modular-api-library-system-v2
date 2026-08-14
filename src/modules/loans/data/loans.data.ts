@@ -26,6 +26,7 @@ export const makeLoansRepository = (executor: DBExecutor): LoanRepository => {
             isNull(loans.returnDate),
           ),
         )
+        .limit(1)
 
       return loan
     },
