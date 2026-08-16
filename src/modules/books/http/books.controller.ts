@@ -12,11 +12,11 @@ export const postCreateUser: RequestHandler = async (req, res) => {
 
 export const getListBooks: RequestHandler = async (req, res) => {
   const result = await service.listAllBooks()
-  return res.status(201).json({ result })
+  return res.status(200).json({ result })
 }
 
 export const getBookById: RequestHandler = async (req, res) => {
   const { id } = validateSchema(idParamsSchema, req, 'params')
   const result = await service.getBookById(id)
-  return res.status(201).json({ result })
+  return res.status(200).json({ result })
 }
