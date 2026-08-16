@@ -12,11 +12,8 @@ export const buildNewUser = (input: CreateUserInput): NewUser => {
   }
 }
 
-export const assertEmailIsNotTaken = (
-  user: User | null,
-  email: string,
-): void => {
-  if (user && user.email === email) {
+export const assertEmailIsNotTaken = (user: User | null): void => {
+  if (user) {
     throw new customErrors.ConflictError('Email provided already taken.')
   }
 }

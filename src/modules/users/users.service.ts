@@ -11,7 +11,7 @@ export const createUser = async (
   repository: UserRepository = userData,
 ) => {
   const userWithEmail = await repository.findUserByEmail(createUserInput.email)
-  domain.assertEmailIsNotTaken(userWithEmail, createUserInput.email)
+  domain.assertEmailIsNotTaken(userWithEmail)
 
   const builtUser = domain.buildNewUser(createUserInput)
   const newUser = await repository.createUser(builtUser)
