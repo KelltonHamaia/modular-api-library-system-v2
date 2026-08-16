@@ -11,7 +11,7 @@ export const makeLoansRepository = (executor: DBExecutor): LoanRepository => {
           total: count(),
         })
         .from(loans)
-        .where(eq(loans.userId, userId))
+        .where(and(eq(loans.userId, userId), isNull(loans.returnDate)))
       return activeLoans.total
     },
 
