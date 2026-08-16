@@ -111,15 +111,15 @@ export const returnLoan = async (loanId: string) => {
   })
 }
 
-export const listLoans = async (db: LoanRepository = loanData) => {
-  const loans = await db.findLoans()
+export const listLoans = async (repository: LoanRepository = loanData) => {
+  const loans = await repository.findLoans()
   return loans
 }
 
 export const listLoansByUserId = async (
   userId: string,
-  db: LoanRepository = loanData,
+  repository: LoanRepository = loanData,
 ) => {
-  const loans = await db.findLoansByUserId(userId)
+  const loans = await repository.findLoansByUserId(userId)
   return loans
 }
