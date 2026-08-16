@@ -12,7 +12,7 @@ export const errorHandlerMiddleware: ErrorRequestHandler = async (
     const flattenError = z.flattenError(error)
     console.log(flattenError)
     return res.status(400).json({
-      error: flattenError,
+      message: flattenError,
     })
   }
 
