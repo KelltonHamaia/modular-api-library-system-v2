@@ -18,7 +18,7 @@ export const idHelper = {
 export const userStatus = pgEnum('userStatus', ['ACTIVE', 'SUSPENDED'])
 export const holdsStatus = pgEnum('holdsStatus', [
   'WAITING',
-  'FULFILED',
+  'FULFILLED',
   'CANCELLED',
 ])
 
