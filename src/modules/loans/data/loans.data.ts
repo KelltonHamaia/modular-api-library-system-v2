@@ -28,7 +28,7 @@ export const makeLoansRepository = (executor: DBExecutor): LoanRepository => {
         )
         .limit(1)
 
-      return loan
+      return loan ?? null
     },
 
     async createLoan(newLoan) {
