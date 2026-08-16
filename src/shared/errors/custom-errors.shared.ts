@@ -1,3 +1,5 @@
+import { ErrorCode } from '@/shared/errors/erros-codes.shared.js'
+
 export class AppError extends Error {
   constructor(
     message: string,
@@ -23,8 +25,10 @@ export class ConflictError extends AppError {
 }
 
 export class BusinessRuleError extends AppError {
-  // This one has to be dynamic because the business rule can be anything (inside the project)
-  constructor(message: string) {
+  constructor(
+    message: string,
+    public readonly errorCode: ErrorCode,
+  ) {
     super(message, 422)
   }
 }

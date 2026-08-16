@@ -23,6 +23,7 @@ export const assertBookHasNoAvailableCopies = (book: Book) => {
   if (book.availableCopies > 0) {
     throw new CustomErrors.BusinessRuleError(
       'Book has available copies. No need to create hold.',
+      'BOOK_HAS_AVAILABLE_COPIES',
     )
   }
 }

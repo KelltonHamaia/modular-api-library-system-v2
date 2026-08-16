@@ -27,6 +27,9 @@ export const ensureUserExists = (rawUser: User | null): User => {
 
 export const assertUserIsActive = (user: User) => {
   if (user.status === 'SUSPENDED') {
-    throw new customErrors.BusinessRuleError('User is suspended.')
+    throw new customErrors.BusinessRuleError(
+      'User is suspended.',
+      'USER_NOT_ACTIVE',
+    )
   }
 }

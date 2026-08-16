@@ -28,6 +28,7 @@ export const assertAvailableCopiesIncreased = (book: Book | null) => {
   if (!book) {
     throw new CustomErrors.BusinessRuleError(
       'AvailableCopies cannot exceed TotalCopies',
+      'AVAILABLE_COPIES_EXCEEDS_TOTAL',
     )
   }
 }
