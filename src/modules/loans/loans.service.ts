@@ -53,6 +53,7 @@ export const returnLoan = async (loanId: string) => {
   return await db.transaction(async (tx) => {
     const loanRepository = makeLoansRepository(tx)
     const bookRepository = makeBookRepository(tx)
+    const holdRepository = makeHoldsRepository(tx)
 
     const rawLoan = await loanRepository.findLoanById(loanId)
     const loan = domain.ensureLoanExists(rawLoan)
@@ -65,8 +66,10 @@ export const returnLoan = async (loanId: string) => {
       isOverDue,
       returnDate,
     )
-
-    const waitingHolds = await listWaitingHoldByBookId(loan.bookId)
+    const waitingHolds = await listWaitingHoldByBookId(
+      loan.bookId,
+      holdRepository,
+    )
 
     const candidateUserIds = waitingHolds.map((hold) => hold.userId)
     const activeUser = await listActiveUsersByIds(candidateUserIds)
@@ -92,7 +95,6 @@ export const returnLoan = async (loanId: string) => {
       const createLoanInput = { bookId, userId }
       const builtLoan = domain.buildLoan(createLoanInput, new Date())
       const newLoan = await loanRepository.createLoan(builtLoan)
-      const holdRepository = makeHoldsRepository(tx)
       await holdRepository.fulfillHoldById(holdToFulfill.id)
       return {
         returnedLoan,
