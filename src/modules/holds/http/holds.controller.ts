@@ -10,7 +10,7 @@ import { idParamsSchema } from '@/shared/http/commom-schemas.http.js'
 export const postCreateHold: RequestHandler = async (req, res) => {
   const createHoldInput = validateSchema(createHoldSchema, req, 'body')
   const result = await service.createHold(createHoldInput)
-  return res.status(200).json({ result })
+  return res.status(201).json({ result })
 }
 
 export const getListHolds: RequestHandler = async (req, res) => {
