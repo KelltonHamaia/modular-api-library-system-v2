@@ -1,4 +1,4 @@
-export type HOLD_STATUS = 'WAITING' | 'FULFILED' | 'CANCELLED'
+export type HOLD_STATUS = 'WAITING' | 'FULFILLED' | 'CANCELLED'
 export type CreateHoldInput = {
   userId: string
   bookId: string

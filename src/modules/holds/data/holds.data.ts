@@ -63,7 +63,7 @@ export const makeHoldsRepository = (executor: DBExecutor): HoldsRepository => {
     async fulfillHoldById(holdId) {
       const [fulfilledHold] = await executor
         .update(holds)
-        .set({ status: 'FULFILED' })
+        .set({ status: 'FULFILLED' })
         .where(eq(holds.id, holdId))
         .returning()
       return fulfilledHold
